@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 인간발달 12차시 수업일기</title>
+    <style>
+        :root { --main: #27ae60; --sub: #3498db; }
+        body { font-family: 'Pretendard', sans-serif; background: #f0f4f3; padding: 20px; display: flex; justify-content: center; }
+        .container { max-width: 500px; width: 100%; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1 { color: var(--main); text-align: center; margin-bottom: 30px; }
+        .box { border: 1px solid #eee; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
+        label { font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; color: #333; }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; font-size: 1rem; }
+        /* 질문이 나타나는 박스 스타일 */
+        .q-display { background: #e8f5e9; padding: 15px; border-radius: 10px; border-left: 5px solid var(--main); font-size: 0.95rem; margin-bottom: 15px; min-height: 40px; color: #2c3e50; font-weight: 500; }
+        button { width: 100%; padding: 15px; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: 0.3s; }
+        .btn-submit { background: var(--main); margin-bottom: 10px; }
+        .btn-view { background: var(--sub); }
+        .feedback-card { background: #f9f9f9; padding: 15px; margin-top: 10px; border-radius: 10px; border-left: 4px solid var(--sub); }
+        .fb-content { color: #e67e22; font-weight: bold; margin-top: 8px; background: white; padding: 8px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌱 성장 수업일기</h1>
+
+        <div class="box">
+            <label>1. 학번 및 이름</label>
+            <input type="text" id="studentId" placeholder="예: 10101 홍길동">
+
+            <label>2. 오늘 배운 차시 선택</label>
+            <select id="lessonSelect" onchange="updateQuestion()">
+                <option value="">-- 차시를 선택하세요 --</option>
+                <option value="1">1차시: 발달의 개념</option>
+                <option value="2">2차시: 발달의 특성</option>
+                <option value="3">3차시: 피아제 인지발달(1)</option>
+                <option value="4">4차시: 피아제 인지발달(2)</option>
+                <option value="5">5차시: 프로이트 성격발달</option>
+                <option value="6">6차시: 에릭슨 심리사회발달</option>
+                <option value="7">7차시: 행동주의 & 사회학습</option>
+                <option value="8">8차시: 영아기 발달과 애착</option>
+                <option value="9">9차시: 정보처리 이론</option>
+                <option value="10">10차시: 유아/아동기 발달</option>
+                <option value="11">11차시: 청소년기 및 노화</option>
+                <option value="12">12차시: 나의 발달 보고서</option>
+            </select>
+
+            <div id="qDisplay" class="q-display" style="display:none;"></div>
+
+            <label>3. 일기 작성</label>
+            <textarea id="content" rows="5" placeholder="위 질문에 대한 생각을 적어보세요."></textarea>
+            
+            <button class="btn-submit" onclick="saveData()">오늘의 기록 제출하기</button>
+        </div>
+
+        <div class="box" style="border-top: 4px solid var(--sub);">
+            <h3 style="margin-top:0; color:var(--sub);">💬 선생님 피드백 확인</h3>
+            <button class="btn-view" onclick="loadFeedback()">내 피드백 불러오기</button>
+            <div id="feedbackList"></div>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXB79B32vOEyv_EHBtCxC5L1UUkMxRBiwHy1JTS27iNHuuXTIReAXXgXsFFcF0UGRp/exec"; 
+
+        // 각 차시별 질문 목록 (데이터베이스 역할을 합니다)
+        const topics = {
+            "1": "💡 [발달의 개념] 1년 전의 나와 지금의 나는 무엇이 달라졌나요? (키, 몸무게, 생각 등)",
+            "2": "💡 [발달의 특성] '세 살 버릇 여든까지 간다'는 말처럼, 나의 어린 시절 습관이 지금의 나에게 어떤 영향을 주고 있나요?",
+            "3": "💡 [피아제(1)] 당연하다고 믿었던 내 지식이 새로운 경험을 통해 바뀌었던 적이 있나요?",
+            "4": "💡 [피아제(2)] 어릴 적 인형이나 사물이 살아있다고 믿었거나, 나 중심으로만 세상을 생각했던 귀여운 추억은?",
+            "5": "💡 [프로이트] 내 마음속의 '하고 싶은 본능'과 '지켜야 할 도덕'이 갈등했던 구체적인 순간은?",
+            "6": "💡 [에릭슨] 나는 지금 어떤 고민(나의 정체성, 학업에 대한 성실함 등)을 가장 많이 하나요?",
+            "7": "💡 [행동주의] 나는 칭찬을 들을 때 더 의욕이 생기나요, 아니면 친구를 따라 할 때 더 잘 배우나요?",
+            "8": "💡 [애착] 내가 마음이 힘들 때 가장 먼저 떠오르고 의지하고 싶은 사람(안전 기지)은 누구인가요?",
+            "9": "💡 [정보처리] 시험 공부를 하거나 무언가를 외울 때, 나만 알고 있는 특별한 암기 비법이 있다면?",
+            "10": "💡 [유아/아동기] 초등학교 시절, 친구와 가장 행복했던 기억이나 큰 갈등을 해결했던 경험을 적어보세요.",
+            "11": "💡 [청소년/노화] 내가 꿈꾸는 20년 뒤 나의 모습은 어떤가요? 어떤 어른이 되고 싶나요?",
+            "12": "💡 [마무리] 한 학기 동안 발달 이론을 배우며 성장한 나에게 가장 해주고 싶은 칭찬 한마디!"
+        };
+
+        // 이 함수가 실행되어야 질문이 바뀝니다!
+        function updateQuestion() {
+            const selectElement = document.getElementById("lessonSelect");
+            const val = selectElement.value; // 선택된 차시 번호 (1, 2, 3...)
+            const display = document.getElementById("qDisplay");
+
+            if(val && topics[val]) {
+                display.innerText = topics[val]; // 선택한 번호에 맞는 질문을 가져옴
+                display.style.display = "block";
+            } else {
+                display.style.display = "none";
+            }
+        }
+
+        // 저장 기능 (이전과 동일)
+        function saveData() {
+            const studentId = document.getElementById("studentId").value;
+            const lesson = document.getElementById("lessonSelect").value;
+            const content = document.getElementById("content").value;
+            if(!studentId || !lesson || !content) return alert("빈칸을 모두 채워주세요!");
+
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                body: JSON.stringify({ studentId, lesson, content })
+            }).then(() => {
+                alert("성공적으로 제출되었습니다!");
+                location.reload();
+            });
+        }
+
+        // 피드백 불러오기 (이전과 동일)
+        function loadFeedback() {
+            const id = document.getElementById("studentId").value;
+            if(!id) return alert("학번과 이름을 입력해주세요!");
+            const list = document.getElementById("feedbackList");
+            list.innerHTML = "조회 중...";
+            fetch(`${SCRIPT_URL}?id=${encodeURIComponent(id)}`)
+            .then(res => res.json())
+            .then(data => {
+                list.innerHTML = "";
+                if(data.length === 0) list.innerHTML = "<p>기록이 없습니다.</p>";
+                else {
+                    data.forEach(item => {
+                        list.innerHTML += `
+                            <div class="feedback-card">
+                                <strong>[${item.lesson}차시 기록]</strong><br>
+                                <small>${item.content}</small>
+                                <div class="fb-content">👨‍🏫 선생님: ${item.feedback}</div>
+                            </div>`;
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
