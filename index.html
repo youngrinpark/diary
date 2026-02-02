@@ -62,22 +62,33 @@
 </div>
 
 <div id="privacyModal" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
-    <div style="background-color: #fff; margin: 10% auto; padding: 20px; border-radius: 10px; width: 80%; max-width: 500px; line-height: 1.6;">
-        <h3 style="margin-top: 0;">개인정보 처리방침</h3>
-        <hr>
-        <div style="max-height: 300px; overflow-y: auto; font-size: 13px; text-align: left;">
-            <strong>1. 수집 목적:</strong> 생활과학탐구 수업 기록 관리 및 개별 피드백 제공<br>
-            <strong>2. 수집 항목:</strong> 성명, 학번, 수업 성찰 내용<br>
-            <strong>3. 보유 기간:</strong> 당해 학년도 종료 시까지 (종료 후 즉시 파기)<br>
-            <strong>4. 이용자의 권리:</strong> <br>
-            이용자는 언제든지 자신의 개인정보에 대해 <strong>열람, 정정, 삭제, 처리 정지</strong>를 요구할 수 있습니다. 권리 행사는 담당 교사(박영린)에게 서면 또는 이메일로 연락하시면 지체 없이 조치하겠습니다.<br>
-            <strong>5. 동의 거부 권리:</strong> 귀하는 동의를 거부할 권리가 있으나, 거부 시 온라인 피드백 서비스 이용이 제한될 수 있습니다.
+    <div style="background-color: #fff; margin: 5% auto; padding: 25px; border-radius: 15px; width: 85%; max-width: 500px; line-height: 1.6; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+        <h3 style="margin-top: 0; color: #27ae60;">🔒 개인정보 처리방침</h3>
+        <hr style="border: 0.5px solid #eee;">
+        <div style="max-height: 400px; overflow-y: auto; font-size: 13.5px; text-align: left; color: #444;">
+            <p><strong>제1조 (개인정보의 처리 목적)</strong><br>
+            본 서비스는 생활과학탐구 수업 기록 관리 및 학생별 맞춤형 피드백 제공을 목적으로 최소한의 개인정보를 수집합니다.</p>
+            
+            <p><strong>제2조 (처리하는 개인정보 항목 및 보유 기간)</strong><br>
+            - 항목: 성명, 학번, 수업 성찰 내용<br>
+            - 기간: <strong>당해 학년도 교육과정 종료 시까지</strong> (종료 후 즉시 파기)</p>
+            
+            <p><strong>제3조 (정보주체의 권리 및 행사방법)</strong><br>
+            이용자는 언제든지 자신의 정보를 <strong>열람, 정정, 삭제, 처리 정지</strong>를 요구할 수 있습니다. 요청 시 담당 교사(박영린)에게 연락하시면 본인 확인 후 즉시 조치하겠습니다.</p>
+            
+            <p><strong>제4조 (개인정보의 안전성 확보 조치)</strong><br>
+            수집된 데이터는 승인된 관리자만 접근 가능한 Google 스프레드시트(SSL 암호화 적용)에 안전하게 저장되며, 외부로 유출되지 않도록 관리합니다.</p>
+            
+            <p><strong>제5조 (개인정보 보호책임자)</strong><br>
+            - 책임자: 박영린 (담당 교사)<br>
+            - 문의: (여기에 이메일 주소 등을 입력하세요)</p>
+            
+            <p style="font-size: 12px; color: #888;">* 귀하는 동의를 거부할 권리가 있으나, 거부 시 피드백 서비스 이용이 제한될 수 있습니다.</p>
         </div>
-        <hr>
-        <button onclick="closeModal()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">닫기</button>
+        <hr style="border: 0.5px solid #eee;">
+        <button onclick="closeModal()" style="padding: 12px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold;">확인 및 닫기</button>
     </div>
 </div>
-
         <div class="box" style="border-top: 4px solid var(--sub);">
             <h3 style="margin-top:0; color:var(--sub);">💬 선생님 피드백 확인</h3>
             <button class="btn-view" onclick="loadFeedback()">내 피드백 불러오기</button>
