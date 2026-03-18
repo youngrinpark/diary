@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌱 인간발달 12차시 수업일기</title>
+    <title>🌱 인간발달 수업일기</title>
     <style>
         :root { --main: #27ae60; --sub: #3498db; }
         body { font-family: 'Pretendard', sans-serif; background: #f0f4f3; padding: 20px; display: flex; justify-content: center; }
@@ -12,13 +12,14 @@
         .box { border: 1px solid #eee; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
         label { font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; color: #333; }
         input, select, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; font-size: 1rem; }
-        /* 질문이 나타나는 박스 스타일 */
         .q-display { background: #e8f5e9; padding: 15px; border-radius: 10px; border-left: 5px solid var(--main); font-size: 0.95rem; margin-bottom: 15px; min-height: 40px; color: #2c3e50; font-weight: 500; }
         button { width: 100%; padding: 15px; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: 0.3s; }
         .btn-submit { background: var(--main); margin-bottom: 10px; }
         .btn-view { background: var(--sub); }
         .feedback-card { background: #f9f9f9; padding: 15px; margin-top: 10px; border-radius: 10px; border-left: 4px solid var(--sub); }
         .fb-content { color: #e67e22; font-weight: bold; margin-top: 8px; background: white; padding: 8px; border-radius: 5px; }
+        /* 정보 입력창 나란히 배치 */
+        .info-row { display: flex; gap: 8px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -27,32 +28,24 @@
 
         <div class="box">
             <label>1. 학생 정보 입력</label>
-<div style="display: flex; gap: 8px; margin-bottom: 10px;">
-    <select id="classSelect" style="flex: 1;">
-        <option value="">반</option>
-        <option value="1">1반</option>
-        <option value="2">2반</option>
-        <option value="3">3반</option>
-        <option value="4">4반</option>
-        <option value="5">5반</option>
-        <option value="6">6반</option>
-        <option value="7">7반</option>
-        <option value="8">8반</option>
-        <option value="9">9반</option>
-        <option value="10">10반</option>
-    </select>
-
-    <select id="numberSelect" style="flex: 1;">
-        <option value="">번호</option>
-        <script>
-            for(let i=1; i<=31; i++) {
-                document.write(`<option value="${i.toString().padStart(2, '0')}">${i}번</option>`);
-            }
-        </script>
-    </select>
-
-    <input type="text" id="s_name" placeholder="이름" style="flex: 1.5; margin-bottom: 0;">
-</div>
+            <div class="info-row">
+                <select id="classSelect" style="flex: 1.2;">
+                    <option value="">반 선택</option>
+                    <script>
+                        for(let i=1; i<=10; i++) document.write(`<option value="${i}">${i}반</option>`);
+                    </script>
+                </select>
+                <select id="numberSelect" style="flex: 1.2;">
+                    <option value="">번호 선택</option>
+                    <script>
+                        for(let i=1; i<=31; i++) {
+                            let val = i < 10 ? '0' + i : i;
+                            document.write(`<option value="${val}">${i}번</option>`);
+                        }
+                    </script>
+                </select>
+                <input type="text" id="s_name" placeholder="이름" style="flex: 1.5; margin-bottom:0;">
+            </div>
 
             <label>2. 오늘 배운 차시 선택</label>
             <select id="lessonSelect" onchange="updateQuestion()">
@@ -62,7 +55,7 @@
                 <option value="3">3차시: 프로이트 심리 성적 발달</option>
                 <option value="4">4차시: 에릭슨 심리 사회 발달</option>
                 <option value="5">5차시: 스키너 조작적 조건화</option>
-                <option value="6">6차시: 스키너 조작적 조건화 </option>
+                <option value="6">6차시: 스키너 심화 </option>
                 <option value="7">7차시: 밴듀라 관찰학습 </option>
                 <option value="8">8차시: 매슬로우의 욕구이론</option>
                 <option value="9">9차시: 영아기 발달</option>
@@ -79,41 +72,10 @@
             <button class="btn-submit" onclick="saveData()">오늘의 기록 제출하기</button>
         </div>
 
-<div style="margin-top: 20px; font-size: 14px; color: #666; text-align: center;">
-    <p>
-        본 서비스는 개인정보 보호법에 따라 학생의 개인정보를 보호합니다.<br>
-        내용 제출 시 <a href="javascript:void(0)" onclick="openModal()" style="color: #007bff; text-decoration: underline;">개인정보 처리방침</a>에 동의한 것으로 간주됩니다.
-    </p>
-</div>
-
-<div id="privacyModal" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
-    <div style="background-color: #fff; margin: 5% auto; padding: 25px; border-radius: 15px; width: 85%; max-width: 500px; line-height: 1.6; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-        <h3 style="margin-top: 0; color: #27ae60;">🔒 개인정보 처리방침</h3>
-        <hr style="border: 0.5px solid #eee;">
-        <div style="max-height: 400px; overflow-y: auto; font-size: 13.5px; text-align: left; color: #444;">
-            <p><strong>제1조 (개인정보의 처리 목적)</strong><br>
-            본 서비스는 생활과학탐구 수업 기록 관리 및 학생별 맞춤형 피드백 제공을 목적으로 최소한의 개인정보를 수집합니다.</p>
-            
-            <p><strong>제2조 (처리하는 개인정보 항목 및 보유 기간)</strong><br>
-            - 항목: 성명, 학번, 수업 성찰 내용<br>
-            - 기간: <strong>당해 학년도 교육과정 종료 시까지</strong> (종료 후 즉시 파기)</p>
-            
-            <p><strong>제3조 (정보주체의 권리 및 행사방법)</strong><br>
-            이용자는 언제든지 자신의 정보를 <strong>열람, 정정, 삭제, 처리 정지</strong>를 요구할 수 있습니다. 요청 시 담당 교사(박영린)에게 연락하시면 본인 확인 후 즉시 조치하겠습니다.</p>
-            
-            <p><strong>제4조 (개인정보의 안전성 확보 조치)</strong><br>
-            수집된 데이터는 승인된 관리자만 접근 가능한 Google 스프레드시트(SSL 암호화 적용)에 안전하게 저장되며, 외부로 유출되지 않도록 관리합니다.</p>
-            
-            <p><strong>제5조 (개인정보 보호책임자)</strong><br>
-            - 책임자: 박영린 (담당 교사)<br>
-            - 문의: (youngrinpark02@gmail.com)</p>
-            
-            <p style="font-size: 12px; color: #888;">* 귀하는 동의를 거부할 권리가 있으나, 거부 시 피드백 서비스 이용이 제한될 수 있습니다.</p>
+        <div style="margin-top: 20px; font-size: 12px; color: #888; text-align: center;">
+            본 서비스는 학습 기록 관리 및 피드백 제공을 위해 학번과 이름을 수집합니다.
         </div>
-        <hr style="border: 0.5px solid #eee;">
-        <button onclick="closeModal()" style="padding: 12px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold;">확인 및 닫기</button>
-    </div>
-</div>
+
         <div class="box" style="border-top: 4px solid var(--sub);">
             <h3 style="margin-top:0; color:var(--sub);">💬 선생님 피드백 확인</h3>
             <button class="btn-view" onclick="loadFeedback()">내 피드백 불러오기</button>
@@ -124,59 +86,63 @@
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXB79B32vOEyv_EHBtCxC5L1UUkMxRBiwHy1JTS27iNHuuXTIReAXXgXsFFcF0UGRp/exec"; 
 
-        // 각 차시별 질문 목록 (데이터베이스 역할을 합니다)
         const topics = {
-            "1": "💡 [발달의 개념] 1년 전의 나와 지금의 나는 무엇이 달라졌나요? (키, 몸무게, 생각 등)",
-            "2": "💡 [발달의 특성] '세 살 버릇 여든까지 간다'는 말처럼, 나의 어린 시절 습관이 지금의 나에게 어떤 영향을 주고 있나요?",
-            "3": "💡  [프로이트] 내 마음속의 '하고 싶은 본능'과 '지켜야 할 도덕'이 갈등했던 구체적인 순간은?",
-            "4": "💡 [에릭슨] 나는 지금 어떤 고민(나의 정체성, 학업에 대한 성실함 등)을 가장 많이 하나요?",
-            "5": "💡 [스키너] 나는 칭찬을 들을 때 더 의욕이 생기나요, 아니면 친구를 따라 할 때 더 잘 배우나요?",
-            "6": "💡 [스키너] 스키너의 행동주의 이론이 적용된 사회 분야에는 어떤 것이 있을까요?",
-            "7": "💡 [밴듀라] 보보 인형 실험이 현대 사회 문제 해결에 적용되는 사례에는 어떤 것이 있을까요?",
-            "8": "💡 [매슬로우] 나의 소비 습관 점검을 통해 매슬로우의 욕구 계층에 따라 분류해보자",
-            "9": "💡 [애착] 내가 마음이 힘들 때 가장 먼저 떠오르고 의지하고 싶은 사람(안전 기지)은 누구인가요?",
-            "10": "💡 [정보처리] 시험 공부를 하거나 무언가를 외울 때, 나만 알고 있는 특별한 암기 비법이 있다면?",
-            "11": "💡 [청소년] 내가 꿈꾸는 20년 뒤 나의 모습은 어떤가요? 어떤 어른이 되고 싶나요?",
-            "12": "💡 [마무리] 한 학기 동안 발달 이론을 배우며 성장한 나에게 가장 해주고 싶은 칭찬 한마디!"
-        }; 
-        // 이 함수가 실행되어야 질문이 바뀝니다!
-        function updateQuestion() {
-            const selectElement = document.getElementById("lessonSelect");
-            const val = selectElement.value; // 선택된 차시 번호 (1, 2, 3...)
-            const display = document.getElementById("qDisplay");
+            "1": "💡 [발달의 개념] 1년 전의 나와 지금의 나는 무엇이 달라졌나요?",
+            "2": "💡 [발달의 특성] 나의 어린 시절 습관이 지금 어떤 영향을 주고 있나요?",
+            "3": "💡 [프로이트] 본능과 도덕이 갈등했던 구체적인 순간은?",
+            "4": "💡 [에릭슨] 나는 지금 어떤 고민을 가장 많이 하나요?",
+            "5": "💡 [스키너] 나는 칭찬을 들을 때 더 의욕이 생기나요?",
+            "6": "💡 [스키너] 행동주의 이론이 적용된 사회 분야는?",
+            "7": "💡 [밴듀라] 보보 인형 실험의 사례가 적용되는 현대 문제는?",
+            "8": "💡 [매슬로우] 나의 소비 습관을 욕구 계층에 따라 분류해보자",
+            "9": "💡 [애착] 내가 힘들 때 가장 먼저 떠오르는 사람은?",
+            "10": "💡 [정보처리] 나만의 특별한 암기 비법이 있다면?",
+            "11": "💡 [청소년] 내가 꿈꾸는 20년 뒤 나의 모습은?",
+            "12": "💡 [마무리] 성찰일지 활동 동안 성장한 나에게 해주고 싶은 칭찬 한마디!"
+        };
 
+        function updateQuestion() {
+            const val = document.getElementById("lessonSelect").value;
+            const display = document.getElementById("qDisplay");
             if(val && topics[val]) {
-                display.innerText = topics[val]; // 선택한 번호에 맞는 질문을 가져옴
+                display.innerText = topics[val];
                 display.style.display = "block";
             } else {
                 display.style.display = "none";
             }
         }
 
-        // 저장 기능 (이전과 동일)
+        // 학번/이름 조합 생성 함수
+        function getFullId() {
+            const cls = document.getElementById("classSelect").value;
+            const num = document.getElementById("numberSelect").value;
+            const name = document.getElementById("s_name").value.trim();
+            if(!cls || !num || !name) return null;
+            return `${cls}반 ${num}번 ${name}`;
+        }
+
         function saveData() {
-            const studentId = document.getElementById("studentId").value;
+            const fullId = getFullId();
             const lesson = document.getElementById("lessonSelect").value;
             const content = document.getElementById("content").value;
-            if(!studentId || !lesson || !content) return alert("빈칸을 모두 채워주세요!");
+            if(!fullId || !lesson || !content) return alert("모든 정보를 입력해주세요!");
 
             fetch(SCRIPT_URL, {
                 method: "POST",
                 mode: "no-cors",
-                body: JSON.stringify({ studentId, lesson, content })
+                body: JSON.stringify({ studentId: fullId, lesson, content })
             }).then(() => {
                 alert("성공적으로 제출되었습니다!");
                 location.reload();
             });
         }
 
-        // 피드백 불러오기 (이전과 동일)
         function loadFeedback() {
-            const id = document.getElementById("studentId").value;
-            if(!id) return alert("학번과 이름을 입력해주세요!");
+            const fullId = getFullId();
+            if(!fullId) return alert("반, 번호, 이름을 입력해주세요!");
             const list = document.getElementById("feedbackList");
             list.innerHTML = "조회 중...";
-            fetch(`${SCRIPT_URL}?id=${encodeURIComponent(id)}`)
+            fetch(`${SCRIPT_URL}?id=${encodeURIComponent(fullId)}`)
             .then(res => res.json())
             .then(data => {
                 list.innerHTML = "";
@@ -193,21 +159,6 @@
                 }
             });
         }
-function openModal() {
-    document.getElementById("privacyModal").style.display = "block";
-}
-
-function closeModal() {
-    document.getElementById("privacyModal").style.display = "none";
-}
-
-// 모달 외부 클릭 시 닫기
-window.onclick = function(event) {
-    var modal = document.getElementById("privacyModal");
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
     </script>
 </body>
 </html>
