@@ -121,21 +121,33 @@
             return `${cls}반 ${num}번 ${name}`;
         }
 
-        function saveData() {
-            const fullId = getFullId();
-            const lesson = document.getElementById("lessonSelect").value;
-            const content = document.getElementById("content").value;
-            if(!fullId || !lesson || !content) return alert("모든 정보를 입력해주세요!");
+       function saveData() {
+    const cls = document.getElementById("classSelect").value;
+    const num = document.getElementById("numberSelect").value;
+    const name = document.getElementById("s_name").value.trim();
+    const lesson = document.getElementById("lessonSelect").value;
+    const content = document.getElementById("content").value;
 
-            fetch(SCRIPT_URL, {
-                method: "POST",
-                mode: "no-cors",
-                body: JSON.stringify({ studentId: fullId, lesson, content })
-            }).then(() => {
-                alert("성공적으로 제출되었습니다!");
-                location.reload();
-            });
-        }
+    if(!cls || !num || !name || !lesson || !content) return alert("모든 정보를 입력해주세요!");
+
+    // 데이터를 각각 나누어서 전송합니다.
+    const data = {
+        class: cls,
+        number: num,
+        name: name,
+        lesson: lesson,
+        content: content
+    };
+
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(data)
+    }).then(() => {
+        alert("성공적으로 제출되었습니다!");
+        location.reload();
+    });
+}
 
         function loadFeedback() {
             const fullId = getFullId();
